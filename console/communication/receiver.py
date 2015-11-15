@@ -6,28 +6,35 @@ from twisted.protocols.basic import LineReceiver
 from communication.manager import NLaunchManager
 from handlers.specific.initial_handler import InitialHandler
 from misc.dal import DAL
+from misc.text import formatMsg
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class NLaunchReceiver(LineReceiver):
 
-    WELCOME_MSG = """
-        Welcome to the (hidden) NSA missile launcher console..
-        To get started on available commands type '!help'
-    """
+    WELCOME_MSG = formatMsg("""
+        #{cyan}Welcome to the (hidden) NSA missile launcher console..#{normal}
 
-    UNRECOGNIZED_CMD_MSG = """
-        Command not recognized.
-        The incident will be reported!"
-    """
+        To get started on available commands run: '#{bold}#{magenta}!help#{normal}'
+    """)
 
-    GOODBYE_MSG = "Goodbye..."
+     "\n".join([
+        colorInfo(""),
+        "" % (colorToken(""),)
+    ])
+
+    UNRECOGNIZED_CMD_MSG = "\n".join([
+        colorError("Command not recognized."),
+        "The incident will be reported!"
+    ])
+
+    GOODBYE_MSG = colorInfo("Goodbye...")
 
     delimiter = "\n".encode("utf8")
 
     def __init__(self, pwdFile):
         super(NLaunchReceiver, self).__init__()
-        self.logger  = getLogger(self.__class__.__name__)
+        self.logger  = getLogger("nlaunch.receiver")
         self.dal     = DAL(pwdFile)
         self.manager = NLaunchManager(self)
         self.handler = InitialHandler(self.dal, self.manager)

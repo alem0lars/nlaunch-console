@@ -1,5 +1,6 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from re import match, escape
+from textwrap import dedent
 
 from handlers.generic.base_handler import BaseHandler
 from handlers.specific.pyjail_handler import PyJailHandler
@@ -8,12 +9,12 @@ from handlers.specific.pyjail_handler import PyJailHandler
 
 class InitialHandler(BaseHandler):
 
-    HELP_MSG = """
+    HELP_MSG = dedent("""
         The following commands are available:
 
             !history
             !launch-missile <ID> <TARGET> <PASSWORD>
-    """
+    """)
 
     MISSILE_ID       = "K00R34N-B00B1ES"
     MISSILE_TARGET   = ", ".join([

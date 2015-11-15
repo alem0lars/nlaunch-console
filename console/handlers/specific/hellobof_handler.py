@@ -1,5 +1,6 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from re import match, escape
+from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
 from handlers.specific.goodbad_handler import GoodBadHandler
@@ -8,7 +9,7 @@ from handlers.specific.goodbad_handler import GoodBadHandler
 
 class HelloBOFHandler(ProcessHandler):
 
-    WELCOME_MSG = """
+    WELCOME_MSG = dedent("""
         For security reasons, the disarm functionality is, by default, disabled.
 
         Before going ahead, you need to *enable the disarm functionality*.
@@ -17,7 +18,7 @@ class HelloBOFHandler(ProcessHandler):
         that to enable disarm:
 
             !enable-disarm <PASSWORD>
-    """
+    """)
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.

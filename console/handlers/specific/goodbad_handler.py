@@ -1,5 +1,6 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from re import match, escape
+from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -7,19 +8,19 @@ from handlers.generic.process_handler import ProcessHandler
 
 class GoodBadHandler(ProcessHandler):
 
-    WELCOME_MSG = """
+    WELCOME_MSG = dedent("""
         Now you can disarm missiles, but you need to find the missile password..
 
         Then, to disarm the missile, run:
 
             !disarm-missile <ID> <PASSWORD>
-    """
+    """)
 
-    WIN_MSG = """
+    WIN_MSG = dedent("""
         Congratulations, the nuclear missile has been successfully disarmed!!
 
         You've saved the world today.. not so easy eh!?
-    """
+    """)
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.

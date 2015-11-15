@@ -1,5 +1,6 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from re import match, escape
+from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
 from handlers.specific.hellobof_handler import HelloBOFHandler
@@ -8,7 +9,7 @@ from handlers.specific.hellobof_handler import HelloBOFHandler
 
 class PyJailHandler(ProcessHandler):
 
-    WELCOME_MSG = """
+    WELCOME_MSG = dedent("""
         To prevent unauthorized access you are now inside a restricted shell..
 
         If you are the right person, you already know how to bypass the
@@ -21,7 +22,7 @@ class PyJailHandler(ProcessHandler):
         the following command:
 
             !unlock-console <PASSWORD>
-    """
+    """)
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.

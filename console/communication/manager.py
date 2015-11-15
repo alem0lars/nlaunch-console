@@ -7,7 +7,7 @@ class NLaunchManager(object):
     """Manage common operations."""
     def __init__(self, receiver):
         super(NLaunchManager, self).__init__()
-        self.logger = getLogger(self.__class__.__name__)
+        self.logger = getLogger("nlaunch.manager")
         self.receiver = receiver
 
     def send(self, s):

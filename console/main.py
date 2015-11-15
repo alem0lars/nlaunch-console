@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # State machine ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ┌────────┐           ┌──────────┐              ┌─────┐   
+# ┌────────┐           ┌──────────┐              ┌─────┐
 # │Decrypt │  enter    │  Unlock  │   shell      │Basic│
 # │ Email  │──hidden ─▶│Restricted│──unlocked───▶│ BOF │
 # └────────┘   code    │  Shell   │              └─────┘
@@ -32,7 +32,6 @@ class Main(object):
     def __init__(self, port, pwdFile):
         super(Main, self).__init__()
         self._configureLogging()
-        self.logger = logging.getLogger("main")
         # Check argument: 'pwdFile'
         if isfile(pwdFile):
             self.pwdFile = pwdFile
@@ -55,8 +54,6 @@ class Main(object):
 
     def _configureLogging(self):
         loggingHandler = logging.StreamHandler()
-        # Minimum allowed logging level is DEBUG
-        loggingHandler.setLevel(logging.DEBUG)
         # Set colored formatter (using package 'colorlog')
         loggingHandler.setFormatter(ColoredFormatter(
                 "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
@@ -72,8 +69,11 @@ class Main(object):
                 secondary_log_colors={},
                 style='%'
         ))
+        self.logger = logging.getLogger("nlaunch")
+        # Set minimum allowed logging level
+        self.logger.setLevel(logging.DEBUG)
         # Add the handler to the root logger
-        logging.getLogger("").addHandler(loggingHandler)
+        self.logger.addHandler(loggingHandler)
 
 
 if __name__ == "__main__": # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
