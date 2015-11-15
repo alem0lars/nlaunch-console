@@ -45,4 +45,4 @@ class NLaunchReceiver(LineReceiver):
         self.logger.info("A new line has been received: '%s'" % (line,))
         handled = self.handler.handle(line)
         if not handled:
-            self.manager.sendLine(UNRECOGNIZED_CMD_MSG)
+            self.manager.sendLine(self.UNRECOGNIZED_CMD_MSG)
