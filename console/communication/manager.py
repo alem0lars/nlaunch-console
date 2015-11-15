@@ -1,4 +1,4 @@
-class Manager(object):
+class NLaunchManager(object):
     """Manage common operations."""
     def __init__(self, receiver):
         super(Manager, self).__init__()

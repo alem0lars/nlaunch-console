@@ -10,8 +10,8 @@
 
 from os import environ
 from twisted.internet import reactor
-from factory import ManagementConsoleFactory
+from communication.factory import NLaunchFactory
 
 
-reactor.listenTCP(int(environ["PORT"]), ManagementConsoleFactory())
+reactor.listenTCP(int(environ["PORT"]), NLaunchFactory())
 reactor.run()

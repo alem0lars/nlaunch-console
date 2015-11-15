@@ -1,3 +1,6 @@
 [submodule "challenges"]
 	path = challenges
 	url = git@github.com:cesena/nlaunch-challenges
+[submodule "vulnbox-tools"]
+	path = vulnbox-tools
+	url = git@github.com:alem0lars/vulnbox-tools.git

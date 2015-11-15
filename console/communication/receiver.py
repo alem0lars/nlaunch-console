@@ -1,6 +1,6 @@
 from twisted.protocols.basic import LineReceiver
 from handlers.specific.initial_handler import InitialHandler
-from manager import Manager
+from communication.manager import NLaunchManager
 
 
 WELCOME_MSG = """
@@ -13,13 +13,13 @@ Goodbye...
 """
 
 
-class ManagementConsoleReceiver(LineReceiver):
+class NLaunchReceiver(LineReceiver):
 
     delimiter = "\n".encode("utf8")
 
     def __init__(self):
-        super(ManagementConsoleReceiver, self).__init__()
-        self.manager = Manager(self)
+        super(NLaunchReceiver, self).__init__()
+        self.manager = NLaunchManager(self)
         self.handler = InitialHandler(self.manager)
 
     def connectionMade(self):
