@@ -30,10 +30,11 @@ class GoodBadHandler(ProcessHandler):
     def __init__(self, dal, manager):
         super(HelloBOFHandler, self).__init__(dal, manager,
             ["gdb", self.VM_FILE], self.VM_LEVEL,
-            welcome_msg=self.WELCOME_MSG)
+            welcomeMsg=self.WELCOME_MSG)
 
-    def _quit_cond(self, line):
+    def _shouldTerminateProcess(self, line):
         if match("^!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.dal.getpwd(4)),), line):
+            self.logger.info("Reached win")
             self.manager.sendLine(self.WIN_MSG)
             self.manager.closeConnection()
             return True

@@ -6,6 +6,8 @@ _vm_leveladmin_group=$4
 _vm_levels_passwords=$5
 _vm_console_port=$6
 _vm_peda_path="/usr/share/peda"
+_vm_console_base_dir="/home/${_vm_console_user}/console"
+_vm_console_launcher="/usr/local/bin/nlaunch-console"
 _local_challenges_dir="${_local_data_dir}/challenges"
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -14,9 +16,10 @@ echo ">> Provisioning started!"
 
 echo ">> Installing packages.." # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 apt-get update
-apt-get install -y gdb gcc git
-apt-get install -y python python-virtualenv
-apt-get install -y python3 python3-virtualenv
+apt-get install -y "gcc" "gdb"                        # ◀─ compiler and debugger
+apt-get install -y "python"  "python-dev"  "python-virtualenv"  # ◀─ python 2
+apt-get install -y "python3" "python3-dev" "python3-virtualenv" # ◀─ python 3
+apt-get install -y "git"                                        # ◀─ vcs
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 echo ">> Configuring peda.." # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -37,29 +40,31 @@ chmod +x /usr/local/bin/*
 echo ">> Setup NLaunch Console.." # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if [[ -z $(id -u ${_vm_console_user} 2>/dev/null) ]]; then
   useradd -m "${_vm_console_user}"
-  gpasswd -a "${_vm_console_user}" ${_vm_leveladmin_group}
+  [[ $(getent group "${_vm_leveladmin_group}") ]] || \
+    groupadd "${_vm_leveladmin_group}"
+  gpasswd -a "${_vm_console_user}" "${_vm_leveladmin_group}"
   echo "${_vm_console_user}:${_vm_console_password}" | /usr/sbin/chpasswd
 else
   rm -R "/home/${_vm_console_user}/console"
 fi
-rsync -av "${_local_data_dir}/console/" "/home/${_vm_console_user}/console/" \
+rsync -av "${_local_data_dir}/console/" "${_vm_console_base_dir}/" \
       --exclude ".venv"
-cd "/home/${_vm_console_user}"
-virtualenv -p "python3" "/home/${_vm_console_user}/console/.venv"
-source "/home/${_vm_console_user}/console/.venv/bin/activate"
-pip install -r "/home/${_vm_console_user}/console/requirements.txt"
+virtualenv -p "python3" "${_vm_console_base_dir}/.venv"
+source "${_vm_console_base_dir}/.venv/bin/activate"
+pip install -r "${_vm_console_base_dir}/requirements.txt"
 deactivate
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 echo ">> Creating NLaunch Console launcher.." # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-_vm_console_launcher="/usr/local/bin/nlaunch-console"
-touch "${_vm_console_launcher}"
-truncate -s0 "${_vm_console_launcher}"
-echo "cd '/home/${_vm_console_user}/console'"     >> "${_vm_console_launcher}"
-echo "source '.venv/bin/activate'"                >> "${_vm_console_launcher}"
-echo "export PORT=${_vm_console_port}"            >> "${_vm_console_launcher}"
-echo "export LEVELS_PWDS=${_vm_levels_passwords}" >> "${_vm_console_launcher}"
-echo "python3 main.py"                            >> "${_vm_console_launcher}"
+cat >"${_vm_console_launcher}" <<EOL
+cd "/home/${_vm_console_user}/console"
+export PORT="${_vm_console_port}"
+export LEVELS_PWDS="${_vm_levels_passwords}"
+sudo -E \
+     -u "${_vm_console_user}" \
+     "${_vm_console_base_dir}/.venv/bin/python3" \
+     "${_vm_console_base_dir}/main.py"
+EOL
 chmod +x "${_vm_console_launcher}"
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

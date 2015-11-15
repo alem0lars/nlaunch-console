@@ -10,10 +10,10 @@ from misc.subprocess_protocol import SubProcessProtocol
 
 class ProcessHandler(BaseHandler):
     """Handler for process-based commands."""
-    def __init__(self, dal, manager, args, user, welcome_msg=None):
+    def __init__(self, dal, manager, args, user, welcomeMsg=None):
         super(ProcessHandler, self).__init__(dal, manager)
-        if welcome_msg:
-            self.manager.sendLine(welcome_msg)
+        if welcomeMsg:
+            self.manager.sendLine(welcomeMsg)
         self.process = SubProcessProtocol(self.manager)
         self.finished = False
         user_info = getpwnam(user)
@@ -22,12 +22,15 @@ class ProcessHandler(BaseHandler):
             path=user_info.pw_dir,
             uid=user_info.pw_uid, gid=user_info.pw_gid,
             usePTY=True)
+        self.logger.info("Started process (program='%s', args='%s')",
+                          (args[0], args[1:]))
 
     def handle(self, line):
-        if quit_cond(line):
+        if self._shouldTerminateProcess(line):
             self.finished = True
 
         if self.finished:
+            self.logger.info("Terminating current process")
             self.process.transport.signalProcess("KILL")
             self._onProcessQuit()
         else:
@@ -35,7 +38,7 @@ class ProcessHandler(BaseHandler):
 
         return True
 
-    def _quit_cond(self, line):
+    def _shouldTerminateProcess(self, line):
         False
 
     def _onProcessQuit(self):

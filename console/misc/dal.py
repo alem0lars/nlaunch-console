@@ -1,14 +1,17 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-import json
+from json import loads
+from logging import getLogger
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class DAL(object):
     """Data access layer."""
-    def __init__(self, pass_file):
+    def __init__(self, pwdFile):
         super(DAL, self).__init__()
-        with open(pass_file, "r") as f:
-            self.passwords = json.loads(f.read(f))
+        self.logger = getLogger(self.__class__.__name__)
+        with open(pwdFile, "r") as f:
+            self.passwords = loads(f.read())
+            self.logger.debug("Loaded passwords from '%s'" % (pwdFile,))
 
-    def getpwd(level):
+    def getpwd(self, level):
         return self.passwords["level-%03d" % (int(level),)]

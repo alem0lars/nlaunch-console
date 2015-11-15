@@ -26,7 +26,7 @@ class InitialHandler(BaseHandler):
     def __init__(self, dal, manager):
         super(InitialHandler, self).__init__(dal, manager)
         self.history = []
-        self._add_command_to_history("launch-missile", {
+        self._addCommandToHistory("launch-missile", {
             "id":     self.MISSILE_ID,
             "target": self.MISSILE_TARGET
         })
@@ -46,29 +46,29 @@ class InitialHandler(BaseHandler):
     # Handlers ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     def _handleHelp(self):
-        print(">> handling help..")
+        self.logger.info("Handling command 'help'")
         self.manager.sendLine(self.HELP_MSG)
         return True
 
     def _handleHistory(self):
-        print(">> handling history..")
+        self.logger.info("Handling command 'history'")
         self.manager.sendLine("The commands already executed are:")
         [self.manager.sendLine(command) for command in self.history]
         return True
 
     def _handleLaunchMissile(self):
-        print(">> handling launch missile..")
+        self.logger.info("Handling command 'launch-missile'")
         self.manager.sendLine("Error: Another missile has already been launched!")
         return True
 
     def _handleEnterPyJail(self):
-        print(">> entering in PyJail..")
+        self.logger.info("Entering in PyJail")
         self.manager.changeHandler(PyJailHandler(self.dal, self.manager))
         return True
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    def _add_command_to_history(self, name, info):
+    def _addCommandToHistory(self, name, info):
         elem = "Command: '%s'" % (name,)
         if len(info) > 0:
             elem += " ( "

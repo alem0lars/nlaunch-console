@@ -6,9 +6,9 @@ from communication.receiver import NLaunchReceiver
 
 
 class NLaunchFactory(Factory):
-    def __init__(self, pass_file):
+    def __init__(self, pwdFile):
         super(NLaunchFactory, self).__init__()
-        self.pass_file = pass_file
+        self.pwdFile = pwdFile
 
     def buildProtocol(self, addr):
-        return NLaunchReceiver(self.pass_file)
+        return NLaunchReceiver(self.pwdFile)

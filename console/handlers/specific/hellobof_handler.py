@@ -28,9 +28,9 @@ class HelloBOFHandler(ProcessHandler):
     def __init__(self, dal, manager):
         super(HelloBOFHandler, self).__init__(dal, manager,
             ["gdb", self.VM_FILE], self.VM_LEVEL,
-            welcome_msg=self.WELCOME_MSG)
+            welcomeMsg=self.WELCOME_MSG)
 
-    def _quit_cond(self, line):
+    def _shouldTerminateProcess(self, line):
         match("^!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line)
 
     def _onProcessQuit(self):

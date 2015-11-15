@@ -33,9 +33,9 @@ class PyJailHandler(ProcessHandler):
     def __init__(self, dal, manager):
         super(PyJailHandler, self).__init__(dal, manager,
             ["python%d" % (self.VM_PY_VERS,), self.VM_FILE], self.VM_LEVEL,
-            welcome_msg=self.WELCOME_MSG)
+            welcomeMsg=self.WELCOME_MSG)
 
-    def _quit_cond(self, line):
+    def _shouldTerminateProcess(self, line):
         match("^!unlock-console\s+%s\s*" % (escape(self.dal.getpwd(2)),), line)
 
     def _onProcessQuit(self):
