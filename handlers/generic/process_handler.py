@@ -10,7 +10,8 @@ class ProcessHandler(BaseHandler):
     """Handler for process-based commands."""
     def __init__(self, manager, args, user, welcome_msg=None):
         super(ProcessHandler, self).__init__(manager)
-        self.manager.sendLine(welcome_msg) if welcome_msg
+        if welcome_msg:
+            self.manager.sendLine(welcome_msg)
         self.process = SubProcessProtocol(self.manager)
         self.finished = False
         user_info = getpwnam(user)

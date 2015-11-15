@@ -1,5 +1,5 @@
 from handlers.generic.process_handler import ProcessHandler
-from handler.specific.hellobof_handler import HelloBOFHandler
+from handlers.specific.hellobof_handler import HelloBOFHandler
 
 from re import match, escape
 

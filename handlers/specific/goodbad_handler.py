@@ -3,7 +3,7 @@ from handlers.generic.process_handler import ProcessHandler
 from re import match, escape
 
 
-class GoodBadHandler(GDBHandler):
+class GoodBadHandler(ProcessHandler):
 
     WELCOME_MSG = """
         Now you can disarm missiles, but you need to find the missile password..

@@ -25,7 +25,7 @@ class InitialHandler(BaseHandler):
 
     """Handler for the initial commands."""
     def __init__(self, manager):
-        super(GeneralHandler, self).__init__(manager)
+        super(InitialHandler, self).__init__(manager)
         self.history = []
         self._add_command_to_history("launch-missile", {
             "id":     self.MISSILE_ID,
