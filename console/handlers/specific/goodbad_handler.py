@@ -21,7 +21,6 @@ class GoodBadHandler(ProcessHandler):
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.
-    PASSWORD   = "5a6Kw1WURKClBeZI" # Password (stored in the virtual machine)
     VM_FILE    = "goodbad.elf"      # Path to the challenge, relative to ~
     VM_LEVEL   = "level-003"        # Associated level in the virtual machine
 
@@ -32,7 +31,7 @@ class GoodBadHandler(ProcessHandler):
             welcome_msg=self.WELCOME_MSG)
 
     def _quit_cond(self, line):
-        if match("^!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.PASSWORD),), line):
+        if match("^!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(DAL().getpwd(4)),), line):
             self.manager.sendLine(WIN_MSG)
             self.manager.closeConnection()
             return True

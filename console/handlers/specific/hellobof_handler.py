@@ -19,7 +19,6 @@ class HelloBOFHandler(ProcessHandler):
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.
-    PASSWORD   = "AMlXqBtw3e3F/Zz7" # Password (stored in the virtual machine)
     VM_FILE    = "hellobof.elf"     # Path to the challenge, relative to ~
     VM_LEVEL   = "level-002"        # Associated level in the virtual machine
 
@@ -30,7 +29,7 @@ class HelloBOFHandler(ProcessHandler):
             welcome_msg=self.WELCOME_MSG)
 
     def _quit_cond(self, line):
-        match("^!enable-disarm\s+%s\s*" % (escape(self.PASSWORD),), line)
+        match("^!enable-disarm\s+%s\s*" % (escape(DAL().getpwd(3)),), line)
 
     def _onProcessQuit(self):
         self.manager.changeHandler(GoodBadHandler(self.manager))

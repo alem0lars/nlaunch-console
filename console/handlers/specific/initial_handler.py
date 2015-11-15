@@ -11,9 +11,6 @@ The following commands are available:
 """
 
 
-COMMAND_ENTER_PYJAIL = "M/OZ5xng2LSbTXmZ"
-
-
 class InitialHandler(BaseHandler):
 
     MISSILE_ID       = "K00R34N-B00B1ES"
@@ -39,7 +36,7 @@ class InitialHandler(BaseHandler):
             return self._handleHistory()
         elif match("\s*!launch-missile\s*", line):
             return self._handleLaunchMissile()
-        elif line == COMMAND_ENTER_PYJAIL:
+        elif line == DAL().getpwd(1):
             return self._handleEnterPyJail()
         else:
             return False
