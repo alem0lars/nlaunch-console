@@ -13,5 +13,5 @@ from twisted.internet import reactor
 from factory import ManagementConsoleFactory
 
 
-reactor.listenTCP(int(environ['PORT']), ManagementConsoleFactory())
+reactor.listenTCP(int(environ["PORT"]), ManagementConsoleFactory())
 reactor.run()

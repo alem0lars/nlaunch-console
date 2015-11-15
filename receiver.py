@@ -1,5 +1,5 @@
 from twisted.protocols.basic import LineReceiver
-from handlers.general_handler import GeneralHandler
+from handlers.specific.initial_handler import InitialHandler
 from manager import Manager
 
 
@@ -20,7 +20,7 @@ class ManagementConsoleReceiver(LineReceiver):
     def __init__(self):
         super(ManagementConsoleReceiver, self).__init__()
         self.manager = Manager(self)
-        self.handler = GeneralHandler(self.manager)
+        self.handler = InitialHandler(self.manager)
 
     def connectionMade(self):
         print(">> made connection with client..")
@@ -29,7 +29,6 @@ class ManagementConsoleReceiver(LineReceiver):
     def connectionLost(self, reason):
         print(">> lost connection with client..")
         self.manager.sendLine(GOODBYE_MSG)
-
 
     def lineReceived(self, line):
         line = line.decode("utf8").rstrip("\r")
