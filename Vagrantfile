@@ -41,6 +41,7 @@ cd "/home/#{$console_user}"
 virtualenv -p python3 "#{$console_venv_dir}"
 source "#{File.join($console_venv_dir, "bin", "activate")}"
 pip install -r "#{$console_dir}/requirements.txt"
+deactivate
 
 echo ">> Configuring NLaunch Challenges"
 manage-levels create_lvl 1
