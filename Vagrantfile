@@ -1,6 +1,8 @@
+# Configuration ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 $vm_data_dir = "/vagrant-data"
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Vagrant.configure("2") do |config|
+Vagrant.configure("2") do |config| # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   config.vm.box = "ubuntu/vivid64"
   config.vm.box_check_update = true
 
@@ -18,6 +20,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell do |s|
     s.path = "provision.sh"
-    s.args = [$vm_data_dir, "nlaunch-console", "f00"]
+    s.args = [
+      $vm_data_dir,
+      "nlaunch-console", "f00",
+      "levels-admin",                # This should be sync'd with manage-levels
+      "/usr/share/levels-passwords", # This should be sync'd with manage-levels
+      3000]
   end
-end
+end # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

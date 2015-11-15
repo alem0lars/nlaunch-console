@@ -1,7 +1,9 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from twisted.protocols.basic import LineReceiver
 from handlers.specific.initial_handler import InitialHandler
 from communication.manager import NLaunchManager
-
+from misc.dal import DAL
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class NLaunchReceiver(LineReceiver):
@@ -11,13 +13,18 @@ class NLaunchReceiver(LineReceiver):
         To get started on available commands type '!help'
     """
 
+    UNRECOGNIZED_CMD_MSG = """
+        Command not recognized.
+        The incident will be reported!"
+    """
+
     GOODBYE_MSG = "Goodbye..."
 
     delimiter = "\n".encode("utf8")
 
-    def __init__(self, data_dir):
+    def __init__(self, pass_file):
         super(NLaunchReceiver, self).__init__()
-        self.dal     = DAL(data_dir)
+        self.dal     = DAL(pass_file)
         self.manager = NLaunchManager(self)
         self.handler = InitialHandler(self.dal, self.manager)
 
@@ -34,4 +41,4 @@ class NLaunchReceiver(LineReceiver):
         print(">> a line has been received (%s).." % (line,))
         handled = self.handler.handle(line)
         if not handled:
-            self.manager.sendLine("Command not recognized. The incident will be reported!")
+            self.manager.sendLine(UNRECOGNIZED_CMD_MSG)

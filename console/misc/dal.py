@@ -1,11 +1,13 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 import json
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class DAL(object):
     """Data access layer."""
-    def __init__(self, data_dir):
-        super(DB, self).__init__()
-        with open("%s/levels-passwords.json" % (data_dir,), data_dir) as f
+    def __init__(self, pass_file):
+        super(DAL, self).__init__()
+        with open(pass_file, "r") as f:
             self.passwords = json.loads(f.read(f))
 
     def getpwd(level):
