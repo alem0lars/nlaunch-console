@@ -23,13 +23,13 @@ class HelloBOFHandler(ProcessHandler):
     VM_LEVEL   = "level-002"        # Associated level in the virtual machine
 
     """Handler for the challenge HelloBOF."""
-    def __init__(self, manager):
-        super(HelloBOFHandler, self).__init__(manager,
+    def __init__(self, dal, manager):
+        super(HelloBOFHandler, self).__init__(dal, manager,
             ["gdb", self.VM_FILE], self.VM_LEVEL,
             welcome_msg=self.WELCOME_MSG)
 
     def _quit_cond(self, line):
-        match("^!enable-disarm\s+%s\s*" % (escape(DAL().getpwd(3)),), line)
+        match("^!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line)
 
     def _onProcessQuit(self):
-        self.manager.changeHandler(GoodBadHandler(self.manager))
+        self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))

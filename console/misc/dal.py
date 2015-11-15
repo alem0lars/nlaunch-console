@@ -1,8 +1,7 @@
 import json
-from misc.singleton import Singleton
 
 
-class DAL(metaclass=Singleton):
+class DAL(object):
     """Data access layer."""
     def __init__(self, data_dir):
         super(DB, self).__init__()

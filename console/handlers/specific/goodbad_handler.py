@@ -25,14 +25,14 @@ class GoodBadHandler(ProcessHandler):
     VM_LEVEL   = "level-003"        # Associated level in the virtual machine
 
     """Handler for the challenge HelloBOF."""
-    def __init__(self, manager):
-        super(HelloBOFHandler, self).__init__(manager,
+    def __init__(self, dal, manager):
+        super(HelloBOFHandler, self).__init__(dal, manager,
             ["gdb", self.VM_FILE], self.VM_LEVEL,
             welcome_msg=self.WELCOME_MSG)
 
     def _quit_cond(self, line):
-        if match("^!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(DAL().getpwd(4)),), line):
-            self.manager.sendLine(WIN_MSG)
+        if match("^!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.dal.getpwd(4)),), line):
+            self.manager.sendLine(self.WIN_MSG)
             self.manager.closeConnection()
             return True
         return False

@@ -29,7 +29,7 @@ echo ">> Configuring vulnbox tools"
 cp "${_local_data_dir}/vulnbox-tools/scripts/*" "/usr/local/bin"
 chmod +x "/usr/local/bin/*"
 
-echo ">> Setup NLaunch Console"
+echo ">> Setup NLaunch Console" # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if [[ -z $(id -u ${_vm_console_user} 2>/dev/null) ]]; then
   useradd -m "${_vm_console_user}"
   echo "${_vm_console_user}:${_vm_console_password}" | /usr/sbin/chpasswd
@@ -42,20 +42,28 @@ virtualenv -p "python3" "/home/${_vm_console_user}/console/.venv"
 source "/home/${_vm_console_user}/console/.venv/bin/activate"
 pip install -r "/home/${_vm_console_user}/console/requirements.txt"
 deactivate
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-echo ">> Configuring NLaunch Challenges"
+echo ">> Configuring NLaunch Challenges" # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [[ -z $(id -u "level-001" 2>/dev/null) ]] && manage-levels create_lvl 1
 cp "${_local_challenges_dir}/pyjail/pyjail.py" "/home/level-001"
+
 [[ -z $(id -u "level-002" 2>/dev/null) ]] && manage-levels create_lvl 2
 cp "${_local_challenges_dir}/hellobof/hellobof.c" "/home/level-002"
-cd "/home/level-002" && gcc -std=c1x -Wall -Wextra --pedantic "hellobof.c" -o "hellobof.elf" && rm "hellobof.c"
+cd "/home/level-002" && \
+  gcc -std=c1x -Wall -Wextra --pedantic "hellobof.c" -o "hellobof.elf" && \
+  rm "hellobof.c"
+
 [[ -z $(id -u "level-003" 2>/dev/null) ]] && manage-levels create_lvl 3
 cp "${_local_challenges_dir}/goodbad/goodbad.c" "/home/level-003"
-cd "/home/level-003" && gcc -std=c1x -Wall -Wextra --pedantic "goodbad.c" -o "goodbad.elf" && rm "goodbad.c"
+cd "/home/level-003" && \
+  gcc -std=c1x -Wall -Wextra --pedantic "goodbad.c" -o "goodbad.elf" && \
+  rm "goodbad.c"
+
 [[ -z $(id -u "level-004" 2>/dev/null) ]] && manage-levels create_lvl 4
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 echo ">> Saving levels passwords at '#{$_local_levels_passwords}'"
-[[ -f "#{$_local_levels_passwords}" ]] && rm "#{$_local_levels_passwords}"
 cp "#{$_vm_levels_passwords}" "#{$_vm_levels_passwords}"
 
 echo ">> Provisioning finished!"

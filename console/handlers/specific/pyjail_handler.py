@@ -28,13 +28,13 @@ class PyJailHandler(ProcessHandler):
     VM_PY_VERS = 3               # Python version to be used
 
     """Handler for the challenge PyJail."""
-    def __init__(self, manager):
-        super(PyJailHandler, self).__init__(manager,
+    def __init__(self, dal, manager):
+        super(PyJailHandler, self).__init__(dal, manager,
             ["python%d" % (self.VM_PY_VERS,), self.VM_FILE], self.VM_LEVEL,
             welcome_msg=self.WELCOME_MSG)
 
     def _quit_cond(self, line):
-        match("^!unlock-console\s+%s\s*" % (escape(DAL().getpwd(2)),), line)
+        match("^!unlock-console\s+%s\s*" % (escape(self.dal.getpwd(2)),), line)
 
     def _onProcessQuit(self):
-        self.manager.changeHandler(HelloBOFHandler(self.manager))
+        self.manager.changeHandler(HelloBOFHandler(self.dal, self.manager))

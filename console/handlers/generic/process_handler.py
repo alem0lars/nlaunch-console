@@ -8,8 +8,8 @@ from misc.subprocess_protocol import SubProcessProtocol
 
 class ProcessHandler(BaseHandler):
     """Handler for process-based commands."""
-    def __init__(self, manager, args, user, welcome_msg=None):
-        super(ProcessHandler, self).__init__(manager)
+    def __init__(self, dal, manager, args, user, welcome_msg=None):
+        super(ProcessHandler, self).__init__(dal, manager)
         if welcome_msg:
             self.manager.sendLine(welcome_msg)
         self.process = SubProcessProtocol(self.manager)

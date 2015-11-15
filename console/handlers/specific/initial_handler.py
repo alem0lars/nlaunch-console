@@ -3,15 +3,14 @@ from handlers.specific.pyjail_handler import PyJailHandler
 from re import match, escape
 
 
-HELP_MSG = """
-The following commands are available:
-
-    !history
-    !launch-missile <ID> <TARGET> <PASSWORD>
-"""
-
-
 class InitialHandler(BaseHandler):
+
+    HELP_MSG = """
+        The following commands are available:
+
+            !history
+            !launch-missile <ID> <TARGET> <PASSWORD>
+    """
 
     MISSILE_ID       = "K00R34N-B00B1ES"
     MISSILE_TARGET   = ", ".join([
@@ -21,8 +20,8 @@ class InitialHandler(BaseHandler):
     ])
 
     """Handler for the initial commands."""
-    def __init__(self, manager):
-        super(InitialHandler, self).__init__(manager)
+    def __init__(self, dal, manager):
+        super(InitialHandler, self).__init__(dal, manager)
         self.history = []
         self._add_command_to_history("launch-missile", {
             "id":     self.MISSILE_ID,
@@ -36,7 +35,7 @@ class InitialHandler(BaseHandler):
             return self._handleHistory()
         elif match("\s*!launch-missile\s*", line):
             return self._handleLaunchMissile()
-        elif line == DAL().getpwd(1):
+        elif line == self.dal.getpwd(1):
             return self._handleEnterPyJail()
         else:
             return False
@@ -45,7 +44,7 @@ class InitialHandler(BaseHandler):
 
     def _handleHelp(self):
         print(">> handling help..")
-        self.manager.sendLine(HELP_MSG)
+        self.manager.sendLine(self.HELP_MSG)
         return True
 
     def _handleHistory(self):
@@ -61,7 +60,7 @@ class InitialHandler(BaseHandler):
 
     def _handleEnterPyJail(self):
         print(">> entering in PyJail..")
-        self.manager.changeHandler(PyJailHandler(self.manager))
+        self.manager.changeHandler(PyJailHandler(self.dal, self.manager))
         return True
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

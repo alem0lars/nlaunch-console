@@ -1,12 +1,4 @@
-
-$console_dir       = File.join($data_dir, "console")
-$console_venv_dir  = File.join($console_dir, ".venv")
-$challenges_dir    = File.join($data_dir, "challenges")
-$vulnbox_tools_dir = File.join($data_dir, "vulnbox-tools", "scripts")
-$console_user      =
-$console_password  =
-$vm_levels_passwords = "/usr/share/levels-passwords"
-$levels_passwords = "/vagrant_data/data/levels-passwords.json"
+$vm_data_dir = "/vagrant-data"
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/vivid64"
@@ -26,10 +18,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell do |s|
     s.path = "provision.sh"
-    s.args = [
-      $vm_data_dir,
-      "nlaunch-console",
-      "f00"
-    ]
+    s.args = [$vm_data_dir, "nlaunch-console", "f00"]
   end
 end
