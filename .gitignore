@@ -1,11 +1,14 @@
-# Virtualenv
-/.venv
+# Virtual environments
+.venv/
 
 # OSX files
 .DS_Store
 
+# Vagrant machines directory
+/.vagrant/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-# Vagrant machines directory
-/.vagrant
+# Don't store secrets in source code repositories :)
+/data/levels-passwords.json

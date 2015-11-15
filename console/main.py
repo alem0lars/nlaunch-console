@@ -1,12 +1,17 @@
+#!/usr/bin/env python3
+#
 # State machine:
 #
-# ┌────┐      enter       ┌──────────┐    pyjail     ┌───────────┐     bin1      ┌───────────┐
-# │INIT│──────pyjail ────▶│  PyJail  │────solved────▶│   Bin1    │────solved────▶│   Bin2    │
+# ┌────┐      enter       ┌──────────┐               ┌───────────┐               ┌───────────┐
+# │INIT│──────pyjail ────▶│  PyJail  │────solved────▶│ HelloBOF  │────solved────▶│  GoodBad  │
 # └────┘     command      └──────────┘               └───────────┘               └───────────┘
-#    ▲                                                                                 │
-#    │                                  bin2                                           │
-#    └──────────────────────────────── solved ─────────────────────────────────────────┘
-
+#                                                                                      │
+#                                        ┌────────────────────solved───────────────────┘
+#                                        │
+#                                        ▼
+#                                   ┌─────────┐
+#                                   │ Victory │
+#                                   └─────────┘
 
 from os import environ
 from twisted.internet import reactor

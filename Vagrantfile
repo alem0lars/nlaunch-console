@@ -1,5 +1,6 @@
 $data_dir          = "/vagrant_data"
 $console_dir       = File.join($data_dir, "console")
+$console_venv_dir  = File.join($console_dir, ".venv")
 $challenges_dir    = File.join($data_dir, "challenges")
 $vulnbox_tools_dir = File.join($data_dir, "vulnbox-tools", "scripts")
 $console_user      = "nlaunch-console"
@@ -36,6 +37,10 @@ else
   rm -R "/home/#{$console_user}/#{File.basename($console_dir)}"
 fi
 cp -a "#{$console_dir}" "/home/#{$console_user}"
+cd "/home/#{$console_user}"
+virtualenv -p python3 "#{$console_venv_dir}"
+source "#{File.join($console_venv_dir, "bin", "activate")}"
+pip install -r "#{$console_dir}/requirements.txt"
 
 echo ">> Configuring NLaunch Challenges"
 manage-levels create_lvl 1
