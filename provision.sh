@@ -77,6 +77,8 @@ cp "${_local_challenges_dir}/hellobof/hellobof.c" "/home/level-002"
 cd "/home/level-002" && \
   gcc -std=c1x -Wall -Wextra --pedantic "hellobof.c" -o "hellobof.elf" && \
   rm "hellobof.c"
+# Reset the ownership of level-001 password (it's a jail not a suid challenge).
+chown "level-001:level-001" "/home/level-001/002-password"
 
 [[ -z $(id -u "level-003" 2>/dev/null) ]] && manage-levels create_lvl 3
 cp "${_local_challenges_dir}/goodbad/goodbad.c" "/home/level-003"
