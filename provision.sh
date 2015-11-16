@@ -28,7 +28,7 @@ if [[ -d "${_vm_peda_path}" ]]; then
   git pull origin master
 else
   git clone "https://github.com/longld/peda.git" "${_vm_peda_path}"
-  echo "source '${_vm_peda_path}/peda.py'" >> "/etc/skel/.gdbinit"
+  echo "source ${_vm_peda_path}/peda.py" > "/etc/gdb/gdbinit"
 fi
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

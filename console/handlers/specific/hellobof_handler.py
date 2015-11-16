@@ -35,6 +35,7 @@ class HelloBOFHandler(ProcessHandler):
     def __init__(self, dal, manager):
         super(HelloBOFHandler, self).__init__(dal, manager,
             [ "gdb",
+              "-q",
               "-iex",
               "set auto-load safe-path /home/{level}".format(level=self.VM_LEVEL),
               self.VM_FILE],

@@ -35,10 +35,13 @@ class GoodBadHandler(ProcessHandler):
     VM_FILE    = "goodbad.elf"      # Path to the challenge, relative to ~
     VM_LEVEL   = "level-003"        # Associated level in the virtual machine
 
+    ID = "K00R34N-B00B1ES"
+
     """Handler for the challenge HelloBOF."""
     def __init__(self, dal, manager):
-        super(HelloBOFHandler, self).__init__(dal, manager,
+        super(GoodBadHandler, self).__init__(dal, manager,
             [ "gdb",
+              "-q",
               "-iex",
               "set auto-load safe-path /home/{level}".format(level=self.VM_LEVEL),
               self.VM_FILE],
