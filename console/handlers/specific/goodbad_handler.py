@@ -38,7 +38,11 @@ class GoodBadHandler(ProcessHandler):
     """Handler for the challenge HelloBOF."""
     def __init__(self, dal, manager):
         super(HelloBOFHandler, self).__init__(dal, manager,
-            ["gdb", self.VM_FILE], self.VM_LEVEL,
+            [ "gdb",
+              "-iex",
+              "set auto-load safe-path /home/{level}".format(level=self.VM_LEVEL),
+              self.VM_FILE],
+            self.VM_LEVEL,
             welcomeMsg=self.WELCOME_MSG)
 
     def _shouldTerminateProcess(self, line):

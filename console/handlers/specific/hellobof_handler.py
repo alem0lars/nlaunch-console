@@ -34,11 +34,15 @@ class HelloBOFHandler(ProcessHandler):
     """Handler for the challenge HelloBOF."""
     def __init__(self, dal, manager):
         super(HelloBOFHandler, self).__init__(dal, manager,
-            ["gdb", self.VM_FILE], self.VM_LEVEL,
+            [ "gdb",
+              "-iex",
+              "set auto-load safe-path /home/{level}".format(level=self.VM_LEVEL),
+              self.VM_FILE],
+            self.VM_LEVEL,
             welcomeMsg=self.WELCOME_MSG)
 
     def _shouldTerminateProcess(self, line):
-        match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line)
+        return match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line)
 
     def _onProcessQuit(self):
         self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))

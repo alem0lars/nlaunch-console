@@ -28,7 +28,7 @@ if [[ -d "${_vm_peda_path}" ]]; then
   git pull origin master
 else
   git clone "https://github.com/longld/peda.git" "${_vm_peda_path}"
-  echo "source '${_vm_peda_path}/peda.py'" > "/etc/skel/.gdbinit"
+  echo "source '${_vm_peda_path}/peda.py'" >> "/etc/skel/.gdbinit"
 fi
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -77,8 +77,6 @@ cp "${_local_challenges_dir}/hellobof/hellobof.c" "/home/level-002"
 cd "/home/level-002" && \
   gcc -std=c1x -Wall -Wextra --pedantic "hellobof.c" -o "hellobof.elf" && \
   rm "hellobof.c"
-# Reset the ownership of level-001 password (it's a jail not a suid challenge).
-chown "level-001:level-001" "/home/level-001/002-password"
 
 [[ -z $(id -u "level-003" 2>/dev/null) ]] && manage-levels create_lvl 3
 cp "${_local_challenges_dir}/goodbad/goodbad.c" "/home/level-003"
@@ -87,6 +85,14 @@ cd "/home/level-003" && \
   rm "goodbad.c"
 
 [[ -z $(id -u "level-004" 2>/dev/null) ]] && manage-levels create_lvl 4
+
+# Reset the ownership of level-001 password (it's a jail not a suid challenge).
+chown "level-001:level-001" "/home/level-001/002-password"
+# Suid the binaries.
+chown "level-003:level-002" "/home/level-002/hellobof.elf"
+chmod u+s "/home/level-002/hellobof.elf"
+chown "level-004:level-003" "/home/level-003/goodbad.elf"
+chmod u+s "/home/level-003/goodbad.elf"
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 echo ">> Provisioning finished!"

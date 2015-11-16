@@ -3,7 +3,7 @@ $vm_data_dir = "/vagrant-data"
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Vagrant.configure("2") do |config| # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  config.vm.box = "ubuntu/vivid64"
+  config.vm.box = "ubuntu/vivid32"
   config.vm.box_check_update = true
 
   config.vm.network "private_network", ip: "10.0.20.102"
