@@ -26,7 +26,7 @@ class GoodBadHandler(ProcessHandler):
     WIN_MSG = dedent("""
         {congrats}
 
-        You've saved the world today.. not so easy eh!?
+        You've saved the world today.. it's not so easy eh!?
     """).format(
         congrats=colorSuccess("Congratulations, the nuclear missile has been successfully disarmed!!"))
 
@@ -50,8 +50,16 @@ class GoodBadHandler(ProcessHandler):
 
     def _shouldTerminateProcess(self, line):
         if match("\s*!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.dal.getpwd(4)),), line):
-            self.logger.info("R E A C H E D      W I N")
+            self.logger.info("R E A C H E D   W I N")
             self.manager.sendLine(self.WIN_MSG)
             self.manager.closeConnection()
-            return True
-        return False
+
+    def _shouldSendToSubprocess(self, line):
+        if match("\s*!disarm-missile", line):
+            self.manager.sendLine(dedent("""
+                {failed}
+
+                Please check the entered ID and/or password..
+            """).format(failed=colorError("Failed to disarm missile!")))
+            return False
+        return True

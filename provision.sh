@@ -22,6 +22,10 @@ apt-get install -y "python3" "python3-dev" "python3-virtualenv" # ◀─ python 
 apt-get install -y "git"                                        # ◀─ vcs
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+echo ">> Disabling protections.."  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+echo "kernel.randomize_va_space = 0" > "/etc/sysctl.d/01-disable-aslr.conf"
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 echo ">> Configuring peda.." # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if [[ -d "${_vm_peda_path}" ]]; then
   cd "${_vm_peda_path}"
@@ -75,13 +79,13 @@ cp "${_local_challenges_dir}/pyjail/pyjail.py" "/home/level-001"
 [[ -z $(id -u "level-002" 2>/dev/null) ]] && manage-levels create_lvl 2
 cp "${_local_challenges_dir}/hellobof/hellobof.c" "/home/level-002"
 cd "/home/level-002" && \
-  gcc -std=c1x -Wall -Wextra --pedantic "hellobof.c" -o "hellobof.elf" && \
+  gcc -fno-stack-protector -std=c1x -Wall -Wextra --pedantic "hellobof.c" -o "hellobof.elf" && \
   rm "hellobof.c"
 
 [[ -z $(id -u "level-003" 2>/dev/null) ]] && manage-levels create_lvl 3
 cp "${_local_challenges_dir}/goodbad/goodbad.c" "/home/level-003"
 cd "/home/level-003" && \
-  gcc -std=c1x -Wall -Wextra --pedantic "goodbad.c" -o "goodbad.elf" && \
+  gcc -fno-stack-protector -std=c1x -Wall -Wextra --pedantic "goodbad.c" -o "goodbad.elf" && \
   rm "goodbad.c"
 
 [[ -z $(id -u "level-004" 2>/dev/null) ]] && manage-levels create_lvl 4

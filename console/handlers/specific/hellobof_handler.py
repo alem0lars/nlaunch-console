@@ -4,7 +4,7 @@ from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
 from handlers.specific.goodbad_handler import GoodBadHandler
-from misc.text import colorInfo, colorToken
+from misc.text import colorInfo, colorToken, colorError
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -43,7 +43,18 @@ class HelloBOFHandler(ProcessHandler):
             welcomeMsg=self.WELCOME_MSG)
 
     def _shouldTerminateProcess(self, line):
-        return match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line)
+        if match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line):
+            return True
+
+    def _shouldSendToSubprocess(self, line):
+        if match("\s*!enable-disarm", line):
+            self.manager.sendLine(dedent("""
+                {failed}
+
+                Please check the entered password..
+            """).format(failed=colorError("Failed to enable the disarm command!")))
+            return False
+        return True
 
     def _onProcessQuit(self):
         self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))

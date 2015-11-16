@@ -34,7 +34,7 @@ class ProcessHandler(BaseHandler):
             self.logger.info("Terminating current process")
             self.process.transport.signalProcess("KILL")
             self._onProcessQuit()
-        else:
+        elif self._shouldSendToSubprocess(line):
             self.process.sendToSubprocess(line)
 
         return True
@@ -42,5 +42,5 @@ class ProcessHandler(BaseHandler):
     def _shouldTerminateProcess(self, line):
         False
 
-    def _onProcessQuit(self):
-        pass
+    def _onProcessQuit(self, line):
+        !self._shouldTerminateProcess(line)

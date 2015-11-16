@@ -23,7 +23,7 @@ class InitialHandler(BaseHandler):
         historyCommand=colorToken("!history"),
         launchCommand=colorToken("!launch-missile <ID> <TARGET> <PASSWORD>"))
 
-    MISSILE_ID       = "K00R34N-B00B1ES"
+    MISSILE_ID       = "K0R34N-B00B135"
     MISSILE_TARGET   = ", ".join([
         "39°02'24.1\"N 125°45'50.7\"E - Rungna People's Pleasure Ground",
         "Pyongyang (평양시)",

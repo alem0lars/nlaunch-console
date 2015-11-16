@@ -43,7 +43,18 @@ class PyJailHandler(ProcessHandler):
             welcomeMsg=self.WELCOME_MSG)
 
     def _shouldTerminateProcess(self, line):
-        return match("\s*!unlock-console\s+%s\s*" % (escape(self.dal.getpwd(2)),), line)
+        if match("\s*!unlock-console\s+%s\s*" % (escape(self.dal.getpwd(2)),), line):
+            return True
+
+    def _shouldSendToSubprocess(self, line):
+        if match("\s*!unlock-console", line):
+            self.manager.sendLine(dedent("""
+                {failed}
+
+                Please check the entered password..
+            """).format(failed=colorError("Failed to unlock the console!")))
+            return False
+        return True
 
     def _onProcessQuit(self):
         self.manager.changeHandler(HelloBOFHandler(self.dal, self.manager))
