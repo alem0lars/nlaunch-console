@@ -1,13 +1,16 @@
-from io import StringIO
-from textwrap import dedent
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+from termcolor import colored
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-import couleur
 
-def formatMsg(msg):
-    s = StringIO()
-    couleur.proxy(s).enable()
-    s.write(dedent(msg))
-    couleur.proxy(s).disable()
-    res = s.getvalue()
-    s.close()
-    return res
+def colorSuccess(msg):
+    return colored(msg, "green", attrs=["underline"])
+
+def colorInfo(msg):
+    return colored(msg, "cyan")
+
+def colorError(msg):
+    return colored(msg, "red", attrs=["underline"])
+
+def colorToken(token):
+    return colored(token, "magenta", attrs=["bold"])

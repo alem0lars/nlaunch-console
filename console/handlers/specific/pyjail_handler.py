@@ -4,6 +4,7 @@ from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
 from handlers.specific.hellobof_handler import HelloBOFHandler
+from misc.text import colorInfo, colorToken
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -16,13 +17,16 @@ class PyJailHandler(ProcessHandler):
         restrictions..
 
         To get real access to the backdoor, you need to use the hidden password,
-        found inside the file '002-password'.
+        found inside the file '{passwordFile}'.
 
-        Once you've found the password, you can *unlock the console*, using
+        Once you've found the password, you can {unlock}, using
         the following command:
 
-            !unlock-console <PASSWORD>
-    """)
+            {unlockCommand}
+    """).format(
+        passwordFile=colorToken("002-password"),
+        unlock=colorInfo("unlock the console"),
+        unlockCommand=colorToken("!unlock-console <PASSWORD>"))
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.

@@ -2,8 +2,11 @@
 from re import match, escape
 from textwrap import dedent
 
+from termcolor import colored
+
 from handlers.generic.base_handler import BaseHandler
 from handlers.specific.pyjail_handler import PyJailHandler
+from misc.text import colorInfo, colorToken
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -12,9 +15,11 @@ class InitialHandler(BaseHandler):
     HELP_MSG = dedent("""
         The following commands are available:
 
-            !history
-            !launch-missile <ID> <TARGET> <PASSWORD>
-    """)
+            {historyCommand}
+            {launchCommand}
+    """).format(
+        historyCommand=colorToken("!history"),
+        launchCommand=colorToken("!launch-missile <ID> <TARGET> <PASSWORD>"))
 
     MISSILE_ID       = "K00R34N-B00B1ES"
     MISSILE_TARGET   = ", ".join([
@@ -53,7 +58,7 @@ class InitialHandler(BaseHandler):
 
     def _handleHistory(self):
         self.logger.info("Handling command 'history'")
-        self.manager.sendLine("The commands already executed are:")
+        self.manager.sendLine("The commands that have already been carried out are:")
         [self.manager.sendLine(command) for command in self.history]
         return True
 
@@ -70,10 +75,10 @@ class InitialHandler(BaseHandler):
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     def _addCommandToHistory(self, name, info):
-        elem = "Command: '%s'" % (name,)
+        elem = "Command: '%s'" % (colored(name, "magenta"),)
         if len(info) > 0:
             elem += " ( "
             for (k,v) in info.items():
-                elem += "%s: %s, " % (k, v)
+                elem += "%s: %s, " % (colored(k, "blue"), colored(v, "green"))
             elem += " )"
         self.history.append(elem)

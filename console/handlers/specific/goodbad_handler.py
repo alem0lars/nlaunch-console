@@ -3,24 +3,30 @@ from re import match, escape
 from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
+from misc.text import colorInfo, colorToken, colorSuccess
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class GoodBadHandler(ProcessHandler):
 
     WELCOME_MSG = dedent("""
-        Now you can disarm missiles, but you need to find the missile password..
+        Now you can disarm missiles, but {findPassword}..
+        It can be found inside the file '{passwordFile}'.
 
         Then, to disarm the missile, run:
 
-            !disarm-missile <ID> <PASSWORD>
-    """)
+            {disarmCommand}
+    """).format(
+        findPassword=colorInfo("you need to find the missile password"),
+        passwordFile=colorToken("004-password"),
+        disarmCommand=colorToken("!disarm-missile <ID> <PASSWORD>"))
 
     WIN_MSG = dedent("""
-        Congratulations, the nuclear missile has been successfully disarmed!!
+        {congrats}
 
         You've saved the world today.. not so easy eh!?
-    """)
+    """).format(
+        congrats=colorSuccess("Congratulations, the nuclear missile has been successfully disarmed!!"))
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.

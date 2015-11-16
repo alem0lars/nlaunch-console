@@ -4,6 +4,7 @@ from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
 from handlers.specific.goodbad_handler import GoodBadHandler
+from misc.text import colorInfo, colorToken
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -12,13 +13,16 @@ class HelloBOFHandler(ProcessHandler):
     WELCOME_MSG = dedent("""
         For security reasons, the disarm functionality is, by default, disabled.
 
-        Before going ahead, you need to *enable the disarm functionality*.
+        Before going ahead, {enableDisarm}.
 
-        You just need to solve a simple challenge to find a password and use
-        that to enable disarm:
+        You just need to solve a simple challenge to find a password
+        (found inside the file '{passwordFile}') to enable disarm:
 
-            !enable-disarm <PASSWORD>
-    """)
+            {enableDisarmCommand}
+    """).format(
+        enableDisarm=colorInfo("enable the disarm functionality"),
+        passwordFile=colorToken("003-password"),
+        enableDisarmCommand=colorToken("!enable-disarm <PASSWORD>"))
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.

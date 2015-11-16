@@ -1,34 +1,34 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from logging import getLogger
+from textwrap import dedent
 
 from twisted.protocols.basic import LineReceiver
 
 from communication.manager import NLaunchManager
 from handlers.specific.initial_handler import InitialHandler
 from misc.dal import DAL
-from misc.text import formatMsg
+from misc.text import colorInfo, colorError, colorToken
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class NLaunchReceiver(LineReceiver):
 
-    WELCOME_MSG = formatMsg("""
-        #{cyan}Welcome to the (hidden) NSA missile launcher console..#{normal}
+    WELCOME_MSG = dedent("""
+        {welcome}
 
-        To get started on available commands run: '#{bold}#{magenta}!help#{normal}'
-    """)
+        To get started on available commands run: '{helpCommand}'
+    """).format(
+        welcome=colorInfo("Welcome to the (hidden) NSA missile launcher console.."),
+        helpCommand=colorToken("!help"))
 
-     "\n".join([
-        colorInfo(""),
-        "" % (colorToken(""),)
-    ])
+    UNRECOGNIZED_CMD_MSG = dedent("""
+        {commandNotRecognized}
+        The incident will be reported!
+    """).format(commandNotRecognized=colorError("Command not recognized."))
 
-    UNRECOGNIZED_CMD_MSG = "\n".join([
-        colorError("Command not recognized."),
-        "The incident will be reported!"
-    ])
-
-    GOODBYE_MSG = colorInfo("Goodbye...")
+    GOODBYE_MSG = dedent("""
+        {goodbye}
+    """).format(goodbye=colorInfo("Goodbye..."))
 
     delimiter = "\n".encode("utf8")
 
