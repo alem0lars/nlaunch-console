@@ -36,7 +36,7 @@ class HelloBOFHandler(ProcessHandler):
             welcomeMsg=self.WELCOME_MSG)
 
     def _shouldTerminateProcess(self, line):
-        match("^!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line)
+        match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line)
 
     def _onProcessQuit(self):
         self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))

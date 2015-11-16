@@ -61,7 +61,7 @@ cd "/home/${_vm_console_user}/console"
 export PORT="${_vm_console_port}"
 export LEVELS_PWDS="${_vm_levels_passwords}"
 sudo -E \
-     -u "${_vm_console_user}" \
+     -u "root" \
      "${_vm_console_base_dir}/.venv/bin/python3" \
      "${_vm_console_base_dir}/main.py"
 EOL

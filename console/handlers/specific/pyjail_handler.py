@@ -41,7 +41,7 @@ class PyJailHandler(ProcessHandler):
             welcomeMsg=self.WELCOME_MSG)
 
     def _shouldTerminateProcess(self, line):
-        match("^!unlock-console\s+%s\s*" % (escape(self.dal.getpwd(2)),), line)
+        match("\s*!unlock-console\s+%s\s*" % (escape(self.dal.getpwd(2)),), line)
 
     def _onProcessQuit(self):
         self.manager.changeHandler(HelloBOFHandler(self.dal, self.manager))

@@ -20,7 +20,7 @@ class NLaunchManager(object):
         self.receiver.transport.loseConnection()
 
     def changeHandler(self, handler):
-        self.logger.info("Changing handler from '%s' to '%s'" %
-                         (self.receiver.handler.__class__.__name__,
-                          handler.__class__.__name__))
+        self.logger.info("Changing handler from '{prev}' to '{next}'".format(
+            prev=self.receiver.handler.__class__.__name__,
+            next=handler.__class__.__name__))
         self.receiver.handler = handler

@@ -14,11 +14,11 @@ from misc.text import colorInfo, colorError, colorToken
 class NLaunchReceiver(LineReceiver):
 
     WELCOME_MSG = dedent("""
-        {welcome}
+        {welcome}..
 
         To get started on available commands run: '{helpCommand}'
     """).format(
-        welcome=colorInfo("Welcome to the (hidden) NSA missile launcher console.."),
+        welcome=colorInfo("Welcome to the (hidden) NSA missile launcher console"),
         helpCommand=colorToken("!help"))
 
     UNRECOGNIZED_CMD_MSG = dedent("""
@@ -49,7 +49,8 @@ class NLaunchReceiver(LineReceiver):
 
     def lineReceived(self, line):
         line = line.decode("utf8").rstrip("\r")
-        self.logger.info("A new line has been received: '%s'" % (line,))
+        self.logger.info("A new line has been received: '{line}'".format(
+            line=line))
         handled = self.handler.handle(line)
         if not handled:
             self.manager.sendLine(self.UNRECOGNIZED_CMD_MSG)

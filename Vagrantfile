@@ -22,9 +22,9 @@ Vagrant.configure("2") do |config| # ━━━━━━━━━━━━━━�
     s.path = "provision.sh"
     s.args = [
       $vm_data_dir,
-      "nlaunch-console", "f00",
-      "levels-admin",                # This should be sync'd with manage-levels
-      "/usr/share/levels-passwords", # This should be sync'd with manage-levels
+      "nlaunchconsole", "f00",
+      "levelsadmin",                # This should be sync'd with manage-levels
+      "/usr/share/levelspasswords", # This should be sync'd with manage-levels
       3000]
   end
 end # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

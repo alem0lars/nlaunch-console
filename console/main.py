@@ -16,7 +16,7 @@
 #                      └─────────┘   missile  └───────────┘
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 import logging
-from os import environ
+from os import environ, geteuid
 from os.path import realpath, dirname, join, isfile
 from sys import exit
 
@@ -28,23 +28,32 @@ from communication.factory import NLaunchFactory
 
 
 class Main(object):
+
+    STATUSCODE_PERMS_DENIED = -1
+    STATUSCODE_INVALID_ARGS = -2
+
     """The entry-point of NLaunch Console."""
     def __init__(self, port, pwdFile):
         super(Main, self).__init__()
         self._configureLogging()
+        # Check if we are 'root':
+        if not geteuid() == 0:
+            self.logger.error("Root permissions are required")
+            exit(self.STATUSCODE_PERMS_DENIED)
         # Check argument: 'pwdFile'
         if isfile(pwdFile):
             self.pwdFile = pwdFile
         else:
-            logger.error("Invalid password file '%s': it's not a regular file" %
-                         (pwdFile,))
-            exit(-1)
+            self.logger.error(
+                "Invalid password file '%s': it's not a regular file" %
+                (pwdFile,))
+            exit(self.STATUSCODE_INVALID_ARGS)
         # Check argument: 'port'
         try:
             self.port = int(port)
         except Exception as e:
             logger.error("Invalid port '%s': %s" % (port, e))
-            exit(-1)
+            exit(self.STATUSCODE_INVALID_ARGS)
 
     def start(self):
         self.logger.info("Starting NLaunch Console (port='%s', pwdFile='%s')" %

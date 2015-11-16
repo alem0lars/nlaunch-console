@@ -22,8 +22,9 @@ class ProcessHandler(BaseHandler):
             path=user_info.pw_dir,
             uid=user_info.pw_uid, gid=user_info.pw_gid,
             usePTY=True)
-        self.logger.info("Started process (program='%s', args='%s')",
-                          (args[0], args[1:]))
+        self.logger.info("Started process (program='{program}', args='{args}', uid='{uid}', gid='{gid}')".format(
+            program=args[0], args=args[1:],
+            uid=user_info.pw_uid, gid=user_info.pw_gid))
 
     def handle(self, line):
         if self._shouldTerminateProcess(line):

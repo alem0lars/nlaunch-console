@@ -59,7 +59,8 @@ class InitialHandler(BaseHandler):
     def _handleHistory(self):
         self.logger.info("Handling command 'history'")
         self.manager.sendLine("The commands that have already been carried out are:")
-        [self.manager.sendLine(command) for command in self.history]
+        for command in self.history:
+            self.manager.sendLine("\t- {command}".format(command=command))
         return True
 
     def _handleLaunchMissile(self):

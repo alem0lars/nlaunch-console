@@ -40,8 +40,8 @@ class GoodBadHandler(ProcessHandler):
             welcomeMsg=self.WELCOME_MSG)
 
     def _shouldTerminateProcess(self, line):
-        if match("^!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.dal.getpwd(4)),), line):
-            self.logger.info("Reached win")
+        if match("\s*!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.dal.getpwd(4)),), line):
+            self.logger.info("R E A C H E D      W I N")
             self.manager.sendLine(self.WIN_MSG)
             self.manager.closeConnection()
             return True
