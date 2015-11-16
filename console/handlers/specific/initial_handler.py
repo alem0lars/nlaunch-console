@@ -6,13 +6,15 @@ from termcolor import colored
 
 from handlers.generic.base_handler import BaseHandler
 from handlers.specific.pyjail_handler import PyJailHandler
-from misc.text import colorInfo, colorToken
+from misc.text import colorInfo, colorToken, colorError
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class InitialHandler(BaseHandler):
 
     HELP_MSG = dedent("""
+        ------------------------------------------------------------------------
+
         The following commands are available:
 
             {historyCommand}
@@ -58,14 +60,19 @@ class InitialHandler(BaseHandler):
 
     def _handleHistory(self):
         self.logger.info("Handling command 'history'")
-        self.manager.sendLine("The commands that have already been carried out are:")
-        for command in self.history:
-            self.manager.sendLine("\t- {command}".format(command=command))
+        self.manager.sendLine(dedent("""
+            The commands that have already been carried out are:
+
+            {commands}
+        """).format(commands="".join(self.history)))
         return True
 
     def _handleLaunchMissile(self):
         self.logger.info("Handling command 'launch-missile'")
-        self.manager.sendLine("Error: Another missile has already been launched!")
+        self.manager.sendLine(dedent("""
+            Error: {launched}
+        """).format(
+            launched=colorError("Another missile has already been launched!")))
         return True
 
     def _handleEnterPyJail(self):

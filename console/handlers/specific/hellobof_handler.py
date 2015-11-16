@@ -11,6 +11,8 @@ from misc.text import colorInfo, colorToken
 class HelloBOFHandler(ProcessHandler):
 
     WELCOME_MSG = dedent("""
+        ------------------------------------------------------------------------
+
         For security reasons, the disarm functionality is, by default, disabled.
 
         Before going ahead, {enableDisarm}.

@@ -14,9 +14,12 @@ from misc.text import colorInfo, colorError, colorToken
 class NLaunchReceiver(LineReceiver):
 
     WELCOME_MSG = dedent("""
+        ------------------------------------------------------------------------
+
         {welcome}..
 
         To get started on available commands run: '{helpCommand}'
+
     """).format(
         welcome=colorInfo("Welcome to the (hidden) NSA missile launcher console"),
         helpCommand=colorToken("!help"))

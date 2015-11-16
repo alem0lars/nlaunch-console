@@ -10,6 +10,8 @@ from misc.text import colorInfo, colorToken, colorSuccess
 class GoodBadHandler(ProcessHandler):
 
     WELCOME_MSG = dedent("""
+        ------------------------------------------------------------------------
+
         Now you can disarm missiles, but {findPassword}..
         It can be found inside the file '{passwordFile}'.
 

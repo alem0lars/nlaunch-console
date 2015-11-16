@@ -11,6 +11,8 @@ from misc.text import colorInfo, colorToken
 class PyJailHandler(ProcessHandler):
 
     WELCOME_MSG = dedent("""
+        ------------------------------------------------------------------------
+
         To prevent unauthorized access you are now inside a restricted shell..
 
         If you are the right person, you already know how to bypass the
