@@ -3,7 +3,7 @@ from re import match, escape
 from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
-from misc.text import colorInfo, colorToken, colorSuccess
+from misc.text import colorInfo, colorToken, colorSuccess, colorError
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -35,7 +35,7 @@ class GoodBadHandler(ProcessHandler):
     VM_FILE    = "goodbad.elf"      # Path to the challenge, relative to ~
     VM_LEVEL   = "level-003"        # Associated level in the virtual machine
 
-    ID = "K00R34N-B00B1ES"
+    ID = "K0R34N-B00B135"
 
     """Handler for the challenge HelloBOF."""
     def __init__(self, dal, manager):

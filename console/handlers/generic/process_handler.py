@@ -40,7 +40,7 @@ class ProcessHandler(BaseHandler):
         return True
 
     def _shouldTerminateProcess(self, line):
-        False
+        return False
 
     def _onProcessQuit(self, line):
-        !self._shouldTerminateProcess(line)
+        return not self._shouldTerminateProcess(line)
