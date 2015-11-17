@@ -2,12 +2,12 @@
 from re import match, escape
 from textwrap import dedent
 
-from handlers.generic.process_handler import ProcessHandler
+from handlers.generic.gdb_handler import GDBHandler
 from misc.text import colorInfo, colorToken, colorSuccess, colorError
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
-class GoodBadHandler(ProcessHandler):
+class GoodBadHandler(GDBHandler):
 
     WELCOME_MSG = dedent("""
         ------------------------------------------------------------------------
@@ -40,19 +40,17 @@ class GoodBadHandler(ProcessHandler):
     """Handler for the challenge HelloBOF."""
     def __init__(self, dal, manager):
         super(GoodBadHandler, self).__init__(dal, manager,
-            [ "gdb",
-              "-q",
-              "-iex",
-              "set auto-load safe-path /home/{level}".format(level=self.VM_LEVEL),
-              self.VM_FILE],
-            self.VM_LEVEL,
-            welcomeMsg=self.WELCOME_MSG)
+            self.VM_FILE, self.VM_LEVEL, self.WELCOME_MSG)
+
+    def onProcessEnded(self, status):
+        self.manager.closeConnection()
 
     def _shouldTerminateProcess(self, line):
         if match("\s*!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.dal.getpwd(4)),), line):
             self.logger.info("R E A C H E D   W I N")
             self.manager.sendLine(self.WIN_MSG)
-            self.manager.closeConnection()
+            return True
+        return super(GoodBadHandler, self)._shouldTerminateProcess(line)
 
     def _shouldSendToSubprocess(self, line):
         if match("\s*!disarm-missile", line):
@@ -62,4 +60,4 @@ class GoodBadHandler(ProcessHandler):
                 Please check the entered ID and/or password..
             """).format(failed=colorError("Failed to disarm missile!")))
             return False
-        return True
+        return super(GoodBadHandler, self)._shouldSendToSubprocess(line)

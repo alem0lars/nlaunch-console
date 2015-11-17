@@ -2,13 +2,12 @@
 from re import match, escape
 from textwrap import dedent
 
-from handlers.generic.process_handler import ProcessHandler
-from handlers.specific.goodbad_handler import GoodBadHandler
+from handlers.generic.gdb_handler import GDBHandler
 from misc.text import colorInfo, colorToken, colorError
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
-class HelloBOFHandler(ProcessHandler):
+class HelloBOFHandler(GDBHandler):
 
     WELCOME_MSG = dedent("""
         ------------------------------------------------------------------------
@@ -34,17 +33,15 @@ class HelloBOFHandler(ProcessHandler):
     """Handler for the challenge HelloBOF."""
     def __init__(self, dal, manager):
         super(HelloBOFHandler, self).__init__(dal, manager,
-            [ "gdb",
-              "-q",
-              "-iex",
-              "set auto-load safe-path /home/{level}".format(level=self.VM_LEVEL),
-              self.VM_FILE],
-            self.VM_LEVEL,
-            welcomeMsg=self.WELCOME_MSG)
+            self.VM_FILE, self.VM_LEVEL, self.WELCOME_MSG)
+
+    def onProcessEnded(self, status):
+        self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))
 
     def _shouldTerminateProcess(self, line):
         if match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line):
             return True
+        return super(HelloBOFHandler, self)._shouldTerminateProcess(line)
 
     def _shouldSendToSubprocess(self, line):
         if match("\s*!enable-disarm", line):
@@ -54,7 +51,4 @@ class HelloBOFHandler(ProcessHandler):
                 Please check the entered password..
             """).format(failed=colorError("Failed to enable the disarm command!")))
             return False
-        return True
-
-    def _onProcessQuit(self):
-        self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))
+        return super(HelloBOFHandler, self)._shouldSendToSubprocess(line)

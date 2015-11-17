@@ -14,4 +14,6 @@ class DAL(object):
             self.logger.info("Loaded passwords from '%s'" % (pwdFile,))
 
     def getpwd(self, level):
-        return self.passwords["level-%03d" % (int(level),)]
+        if isinstance(level, int):
+            level = "level-%03d" % (int(level),)
+        return self.passwords[level]

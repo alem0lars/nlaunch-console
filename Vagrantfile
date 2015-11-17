@@ -1,7 +1,7 @@
 # Configuration ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-$vm_data_dir = "/vagrant-data"
+$vm_data_dir     = "/vagrant-data"
 $vm_nlaunch_port = 3000
-$nlaunch_port = 13000
+$nlaunch_port    = 13000
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Vagrant.configure("2") do |config| # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
