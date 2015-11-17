@@ -19,6 +19,9 @@ class NLaunchManager(object):
     def closeConnection(self):
         self.receiver.transport.loseConnection()
 
+    def getCurrentHandler(self):
+        return self.receiver.handler
+
     def changeHandler(self, handler):
         self.logger.info("Changing handler from '{prev}' to '{next}'".format(
             prev=self.receiver.handler.__class__.__name__,

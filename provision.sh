@@ -93,9 +93,12 @@ cd "/home/level-003" && \
 # Reset the ownership of level-001 password (it's a jail not a suid challenge).
 chown "level-001:level-001" "/home/level-001/002-password"
 # Suid the binaries.
+#mount -o remount,suid /
 chown "level-003:level-002" "/home/level-002/hellobof.elf"
+chmod 550 "/home/level-002/hellobof.elf"
 chmod u+s "/home/level-002/hellobof.elf"
 chown "level-004:level-003" "/home/level-003/goodbad.elf"
+chmod 550 "/home/level-003/goodbad.elf"
 chmod u+s "/home/level-003/goodbad.elf"
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

@@ -1,4 +1,5 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+from logging import getLogger
 from pwd import getpwnam
 
 from twisted.internet import reactor
@@ -66,9 +67,9 @@ class SubProcessProtocol(ProcessProtocol):
         self.manager.send(data.decode("utf8"))
 
     def processEnded(self, status):
-        if isinstance(self.manager.handler, ProcessHandler):
+        if isinstance(self.manager.getCurrentHandler(), ProcessHandler):
             self.logger.debug("Process ended. Notifying the handler")
-            self.manager.handler.onProcessEnded(status)
+            self.manager.getCurrentHandler().onProcessEnded(status)
 
     def sendToSubprocess(self, s):
         self.logger.debug("Sending '%s' to subprocess" % (s,))

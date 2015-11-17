@@ -1,5 +1,5 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-from re import match, escape
+from re import match, escape, findall
 from textwrap import dedent
 
 from handlers.generic.run_program_handler import RunProgramHandler
@@ -34,12 +34,13 @@ class GDBHandler(ProcessHandler):
 
     def _shouldSendToSubprocess(self, line):
         if match("\s*!run-program\s*", line):
-            m = re.findall("\s*!run-program(?:\s+(.+))?", line)
+            m = findall("\s*!run-program(?:\s+(.+))?", line)
             suffix = m[0]
             self.logger.debug("Suffix: %s" % suffix)
-            args = " ".split(suffix).unshift(self.binary)
+            args = suffix.split(" ")
+            args.insert(0, self.binary)
             self.manager.changeHandler(
-                RunProgramHandler(dal, manager, args, self.user,
+                RunProgramHandler(self.dal, self.manager, args, self.user,
                     self)) # Return to this handler after program termination.
             return False
         return super(GDBHandler, self)._shouldSendToSubprocess(line)

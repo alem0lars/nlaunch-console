@@ -8,6 +8,13 @@ Vagrant.configure("2") do |config| # ━━━━━━━━━━━━━━�
   config.vm.box = "ubuntu/vivid32"
   config.vm.box_check_update = true
 
+  # If the machine is already provisioning and login fails, run:
+  #   $ sudo passwd root
+  #   # mkdir -m 700 /root/.ssh && cp ~vagrant/.ssh/authorized_keys /root/.ssh
+  #config.ssh.username = 'root'
+  #config.ssh.password = 'vagrant'
+  #config.ssh.insert_key = 'true'
+
   config.vm.network "private_network", ip: "10.0.20.102"
   config.vm.network "forwarded_port", guest: $vm_nlaunch_port, host: $nlaunch_port
 
