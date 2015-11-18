@@ -14,7 +14,7 @@ class InitialHandler(BaseHandler):
 
     HELP_MSG = dedent("""
         ------------------------------------------------------------------------
-
+        1.
         The following commands are available:
 
             {historyCommand}

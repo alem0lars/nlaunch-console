@@ -4,7 +4,7 @@ from textwrap import dedent
 
 from handlers.generic.process_handler import ProcessHandler
 from handlers.specific.hellobof_handler import HelloBOFHandler
-from misc.text import colorInfo, colorToken
+from misc.text import colorInfo, colorToken, colorError
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -12,7 +12,7 @@ class PyJailHandler(ProcessHandler):
 
     WELCOME_MSG = dedent("""
         ------------------------------------------------------------------------
-
+        2.
         To prevent unauthorized access you are now inside a restricted shell..
 
         If you are the right person, you already know how to bypass the
@@ -41,15 +41,19 @@ class PyJailHandler(ProcessHandler):
         super(PyJailHandler, self).__init__(dal, manager,
             ["python%d" % (self.VM_PY_VERS,), self.VM_FILE], self.VM_LEVEL,
             welcomeMsg=self.WELCOME_MSG)
+        self.win = False
 
     def onProcessEnded(self, status):
-        self.manager.changeHandler(HelloBOFHandler(self.dal, self.manager))
+        if self.win:
+            self.manager.changeHandler(HelloBOFHandler(self.dal, self.manager))
+        else:
+            self.manager.changeHandler(PyJailHandler(self.dal, self.manager))
 
     def _shouldTerminateProcess(self, line):
         if match("\s*!unlock-console\s+%s\s*" % (escape(self.dal.getpwd(2)),), line):
+            self.win = True
             return True
         return super(PyJailHandler, self)._shouldTerminateProcess(line)
-
 
     def _shouldSendToSubprocess(self, line):
         if match("\s*!unlock-console", line):

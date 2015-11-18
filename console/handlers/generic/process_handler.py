@@ -31,12 +31,12 @@ class ProcessHandler(BaseHandler):
             uid=user_info.pw_uid, gid=user_info.pw_gid))
 
     def handle(self, line):
-        if self._shouldTerminateProcess(line):
+        if not self.finished and self._shouldTerminateProcess(line):
+            self.logger.info("Terminating current process")
             self.finished = True
 
         if self.finished:
-            self.logger.info("Terminating current process")
-            self.process.transport.signalProcess("TERM")
+            self.process.transport.signalProcess("KILL")
         elif self._shouldSendToSubprocess(line):
             self.process.sendToSubprocess(line)
 
@@ -50,7 +50,6 @@ class ProcessHandler(BaseHandler):
 
     def onProcessEnded(self, status):
         pass
-
 
 class SubProcessProtocol(ProcessProtocol):
     """Protocol managing interaction with a sub-process."""
@@ -67,10 +66,18 @@ class SubProcessProtocol(ProcessProtocol):
         self.manager.send(data.decode("utf8"))
 
     def processEnded(self, status):
-        if isinstance(self.manager.getCurrentHandler(), ProcessHandler):
-            self.logger.debug("Process ended. Notifying the handler")
-            self.manager.getCurrentHandler().onProcessEnded(status)
+        self._notifyProcessEnded(status)
 
     def sendToSubprocess(self, s):
         self.logger.debug("Sending '%s' to subprocess" % (s,))
         self.transport.write(("%s\n" % (s,)).encode("utf8"))
+
+    def _notifyProcessEnded(self, status):
+        try:
+            if callable(self.manager.getCurrentHandler().onProcessEnded):
+                self.logger.debug("Process ended. Notifying the handler")
+                self.manager.getCurrentHandler().onProcessEnded(status)
+        except AttributeError as e:
+            self.logger.debug(
+                "Handler '{handler}' doesn't respond to event 'process ended'".format(
+                    handler=self.manager.getCurrentHandler().__class__.__name__))

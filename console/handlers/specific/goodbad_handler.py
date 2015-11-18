@@ -11,7 +11,7 @@ class GoodBadHandler(GDBHandler):
 
     WELCOME_MSG = dedent("""
         ------------------------------------------------------------------------
-
+        4.
         Now you can disarm missiles, but {findPassword}..
         It can be found inside the file '{passwordFile}'.
 
@@ -41,14 +41,19 @@ class GoodBadHandler(GDBHandler):
     def __init__(self, dal, manager):
         super(GoodBadHandler, self).__init__(dal, manager,
             self.VM_FILE, self.VM_LEVEL, self.WELCOME_MSG)
+        self.win = False
 
     def onProcessEnded(self, status):
-        self.manager.closeConnection()
+        if self.win:
+            self.manager.closeConnection()
+        else:
+            self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))
 
     def _shouldTerminateProcess(self, line):
         if match("\s*!disarm-missile\s+%s\s+%s\s*" % (escape(self.ID), escape(self.dal.getpwd(4)),), line):
             self.logger.info("R E A C H E D   W I N")
             self.manager.sendLine(self.WIN_MSG)
+            self.win = True
             return True
         return super(GoodBadHandler, self)._shouldTerminateProcess(line)
 
