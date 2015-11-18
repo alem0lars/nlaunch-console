@@ -23,7 +23,7 @@ class GDBHandler(ProcessHandler):
 
             {runCommand}
     """).format(
-        argCmdExample=colorInfo('{"AAAAAAAAAAAA\xef\xbe\xad\xde"}'),
+        argCmdExample=colorInfo('{"AAAAAAAAAAAA\\xef\\xbe\\xad\\xde"}'),
         runCommand=colorToken("!run-program <ARGS>"))
 
     """Handler for a GDB-based challenge."""
