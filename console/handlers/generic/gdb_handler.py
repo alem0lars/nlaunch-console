@@ -61,7 +61,7 @@ class GDBHandler(ProcessHandler):
         if len(matches) > 0:
             # THIS FUCKING LINE WASTED 8 OF MY HOURS!!!
             # IF YOU FUCKING DELETE IT, I WILL FUCKING BURN YOU IN THE HELL
-            args = [literal_eval(matches[0]).encode("latin1")]
+            # args = [literal_eval(matches[0]).encode("latin1")]
         else:
             args = argsStr.split(" ")
 
