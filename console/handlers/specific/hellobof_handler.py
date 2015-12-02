@@ -1,10 +1,10 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from re import match, escape
 from textwrap import dedent
 
 from handlers.generic.gdb_handler import GDBHandler
 from handlers.specific.goodbad_handler import GoodBadHandler
-from misc.text import colorInfo, colorToken, colorError
+from misc.text import color_info, color_token, color_error
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -22,9 +22,9 @@ class HelloBOFHandler(GDBHandler):
 
             {enableDisarmCommand}
     """).format(
-        enableDisarm=colorInfo("enable the disarm functionality"),
-        passwordFile=colorToken("003-password"),
-        enableDisarmCommand=colorToken("!enable-disarm <PASSWORD>"))
+        enableDisarm=color_info("enable the disarm functionality"),
+        passwordFile=color_token("003-password"),
+        enableDisarmCommand=color_token("!enable-disarm <PASSWORD>"))
 
     # Keep the following data in sync with the virtual machine containing the
     # challenge.
@@ -40,22 +40,22 @@ class HelloBOFHandler(GDBHandler):
     def onProcessEnded(self, status):
         self.logger.debug("HelloBOFHandler.onProcessEnded")
         if self.win:
-            self.manager.changeHandler(GoodBadHandler(self.dal, self.manager))
+            self.com.change_handler(GoodBadHandler(self.dal, self.com))
         else:
-            self.manager.changeHandler(HelloBOFHandler(self.dal, self.manager))
+            self.com.change_handler(HelloBOFHandler(self.dal, self.com))
 
-    def _shouldTerminateProcess(self, line):
-        if match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.getpwd(3)),), line):
+    def _should_term_proc(self, line):
+        if match("\s*!enable-disarm\s+%s\s*" % (escape(self.dal.get_lvl_pwd(3)),), line):
             self.win = True
             return True
-        return super(HelloBOFHandler, self)._shouldTerminateProcess(line)
+        return super(HelloBOFHandler, self)._should_term_proc(line)
 
-    def _shouldSendToSubprocess(self, line):
+    def _should_send_to_subproc(self, line):
         if match("\s*!enable-disarm", line):
-            self.manager.sendLine(dedent("""
+            self.com.send_line(dedent("""
                 {failed}
 
                 Please check the entered password..
-            """).format(failed=colorError("Failed to enable the disarm command!")))
+            """).format(failed=color_error("Failed to enable the disarm command!")))
             return False
-        return super(HelloBOFHandler, self)._shouldSendToSubprocess(line)
+        return super(HelloBOFHandler, self)._should_send_to_subproc(line)

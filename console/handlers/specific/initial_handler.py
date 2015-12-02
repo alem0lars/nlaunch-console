@@ -1,12 +1,12 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from re import match, escape
-from textwrap import dedent
 
+from textwrap import dedent
 from termcolor import colored
 
 from handlers.generic.base_handler import BaseHandler
 from handlers.specific.pyjail_handler import PyJailHandler
-from misc.text import colorInfo, colorToken, colorError
+from misc.text import color_info, color_token, color_error
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -17,11 +17,11 @@ class InitialHandler(BaseHandler):
         1.
         The following commands are available:
 
-            {historyCommand}
-            {launchCommand}
+            {cmd_history}
+            {cmd_launch}
     """).format(
-        historyCommand=colorToken("!history"),
-        launchCommand=colorToken("!launch-missile <ID> <TARGET> <PASSWORD>"))
+        cmd_history=color_token("!history"),
+        cmd_launch=color_token("!launch-missile <ID> <TARGET> <PASSWORD>"))
 
     MISSILE_ID       = "K0R34N-B00B135"
     MISSILE_TARGET   = ", ".join([
@@ -34,7 +34,7 @@ class InitialHandler(BaseHandler):
     def __init__(self, dal, manager):
         super(InitialHandler, self).__init__(dal, manager)
         self.history = []
-        self._addCommandToHistory("launch-missile", {
+        self._add_cmd_to_history("launch-missile", {
             "id":     self.MISSILE_ID,
             "target": self.MISSILE_TARGET
         })
@@ -43,11 +43,11 @@ class InitialHandler(BaseHandler):
         if match("\s*!help\s*", line):
             return self._handleHelp()
         elif match("\s*!history\s*", line):
-            return self._handleHistory()
+            return self._handle_history()
         elif match("\s*!launch-missile\s*", line):
-            return self._handleLaunchMissile()
-        elif line == self.dal.getpwd(1):
-            return self._handleEnterPyJail()
+            return self._handle_launch_missile()
+        elif line == self.dal.get_lvl_pwd(1):
+            return self._handle_enter_pyjail()
         else:
             return False
 
@@ -55,34 +55,34 @@ class InitialHandler(BaseHandler):
 
     def _handleHelp(self):
         self.logger.info("Handling command 'help'")
-        self.manager.sendLine(self.HELP_MSG)
+        self.com.send_line(self.HELP_MSG)
         return True
 
-    def _handleHistory(self):
+    def _handle_history(self):
         self.logger.info("Handling command 'history'")
-        self.manager.sendLine(dedent("""
+        self.com.send_line(dedent("""
             The commands that have already been carried out are:
 
             {commands}
         """).format(commands="".join(self.history)))
         return True
 
-    def _handleLaunchMissile(self):
+    def _handle_launch_missile(self):
         self.logger.info("Handling command 'launch-missile'")
-        self.manager.sendLine(dedent("""
+        self.com.send_line(dedent("""
             Error: {launched}
         """).format(
-            launched=colorError("Another missile has already been launched!")))
+            launched=color_error("Another missile has already been launched!")))
         return True
 
-    def _handleEnterPyJail(self):
+    def _handle_enter_pyjail(self):
         self.logger.info("Entering in PyJail")
-        self.manager.changeHandler(PyJailHandler(self.dal, self.manager))
+        self.com.change_handler(PyJailHandler(self.dal, self.com))
         return True
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    def _addCommandToHistory(self, name, info):
+    def _add_cmd_to_history(self, name, info):
         elem = "Command: '%s'" % (colored(name, "magenta"),)
         if len(info) > 0:
             elem += " ( "

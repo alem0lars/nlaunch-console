@@ -1,4 +1,4 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from pwd import getpwnam
 
 from twisted.internet import reactor
@@ -14,4 +14,4 @@ class RunProgramHandler(ProcessHandler):
         self.nextHandler = nextHandler
 
     def onProcessEnded(self, status):
-        self.manager.changeHandler(self.nextHandler)
+        self.com.change_handler(self.nextHandler)

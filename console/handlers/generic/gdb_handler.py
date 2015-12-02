@@ -1,4 +1,4 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from ast import literal_eval
 from re import match, escape, findall
 from os import seteuid, setegid
@@ -6,7 +6,7 @@ from textwrap import dedent
 
 from handlers.generic.run_program_handler import RunProgramHandler
 from handlers.generic.process_handler import ProcessHandler
-from misc.text import colorInfo, colorToken, colorError
+from misc.text import color_info, color_token, color_error
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
@@ -23,12 +23,14 @@ class GDBHandler(ProcessHandler):
 
             {runCommand}
     """).format(
-        argCmdExample=colorInfo('{"AAAAAAAAAAAA\\xef\\xbe\\xad\\xde"}'),
-        runCommand=colorToken("!run-program <ARGS>"))
+        argCmdExample=color_info('{"AAAAAAAAAAAA\\xef\\xbe\\xad\\xde"}'),
+        runCommand=color_token("!run-program <ARGS>"))
 
     """Handler for a GDB-based challenge."""
     def __init__(self, dal, manager, binary, user, welcomeMsg=None):
-        super(GDBHandler, self).__init__(dal, manager,
+        super(GDBHandler, self).__init__(
+            dal,
+            manager,
             ["gdb",
              "-q",
              "-iex",
@@ -41,27 +43,25 @@ class GDBHandler(ProcessHandler):
         self.binary = binary
         self.user = user
 
-    def _shouldSendToSubprocess(self, line):
+    def _should_send_to_subproc(self, line):
         if match("\s*!run-program\s*", line):
             m = findall("\s*!run-program(?:\s+(.+))?", line)
             suffix = m[0]
             self.logger.debug("Suffix: '%s'" % suffix)
             args = self._buildArgs(suffix)
             args.insert(0, self.binary)
-            self.manager.changeHandler(
-                RunProgramHandler(self.dal, self.manager, args, self.user,
-                    self)) # Return to this handler after program termination.
+            # Run program and return to this handler after program termination.
+            self.com.change_handler(
+                RunProgramHandler(self.dal, self.com, args, self.user, self))
             return False
-        return super(GDBHandler, self)._shouldSendToSubprocess(line)
+        return super(GDBHandler, self)._should_send_to_subproc(line)
 
     def _buildArgs(self, argsStr):
         args = None
 
         matches = findall(r'\{([^\}]+)\}', argsStr)
         if len(matches) > 0:
-            # THIS FUCKING LINE WASTED 8 OF MY HOURS!!!
-            # IF YOU FUCKING DELETE IT, I WILL FUCKING BURN YOU IN THE HELL
-            # args = [literal_eval(matches[0]).encode("latin1")]
+            args = [literal_eval(matches[0]).encode("latin1")]
         else:
             args = argsStr.split(" ")
 

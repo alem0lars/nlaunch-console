@@ -15,12 +15,11 @@ _local_challenges_dir="${_local_data_dir}/challenges"
 echo ">> Provisioning started!"
 
 echo ">> Installing packages.." # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# TODO uncomment
-# apt-get update
-# apt-get install -y "gcc" "gdb"                        # ◀─ compiler and debugger
-# apt-get install -y "python"  "python-dev"  "python-virtualenv"  # ◀─ python 2
-# apt-get install -y "python3" "python3-dev" "python3-virtualenv" # ◀─ python 3
-# apt-get install -y "git"                                        # ◀─ vcs
+apt-get update
+apt-get install -y "gcc" "gdb"                        # ◀─ compiler and debugger
+apt-get install -y "python"  "python-dev"  "python-virtualenv"  # ◀─ python 2
+apt-get install -y "python3" "python3-dev" "python3-virtualenv" # ◀─ python 3
+apt-get install -y "git"                                        # ◀─ vcs
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 echo ">> Disabling protections.."  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

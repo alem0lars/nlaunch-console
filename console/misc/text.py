@@ -1,16 +1,16 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from termcolor import colored
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
-def colorSuccess(msg):
+def color_success(msg):
     return colored(msg, "green", attrs=["underline"])
 
-def colorInfo(msg):
+def color_info(msg):
     return colored(msg, "cyan")
 
-def colorError(msg):
+def color_error(msg):
     return colored(msg, "red", attrs=["underline"])
 
-def colorToken(token):
+def color_token(token):
     return colored(token, "magenta", attrs=["bold"])

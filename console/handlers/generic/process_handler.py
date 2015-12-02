@@ -1,4 +1,4 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from logging import getLogger
 from pwd import getpwnam
 
@@ -14,8 +14,8 @@ class ProcessHandler(BaseHandler):
     def __init__(self, dal, manager, args, user, welcomeMsg=None):
         super(ProcessHandler, self).__init__(dal, manager)
         if welcomeMsg:
-            self.manager.sendLine(welcomeMsg)
-        self.process = SubProcessProtocol(self.manager)
+            self.com.send_line(welcomeMsg)
+        self.process = SubProcessProtocol(self.com)
         user_info = getpwnam(user)
         self.uid = user_info.pw_uid
         self.gid = user_info.pw_gid
@@ -31,21 +31,21 @@ class ProcessHandler(BaseHandler):
             uid=user_info.pw_uid, gid=user_info.pw_gid))
 
     def handle(self, line):
-        if not self.finished and self._shouldTerminateProcess(line):
+        if not self.finished and self._should_term_proc(line):
             self.logger.info("Terminating current process")
             self.finished = True
 
         if self.finished:
             self.process.transport.signalProcess("KILL")
-        elif self._shouldSendToSubprocess(line):
+        elif self._should_send_to_subproc(line):
             self.process.sendToSubprocess(line)
 
         return True
 
-    def _shouldSendToSubprocess(self, line):
+    def _should_send_to_subproc(self, line):
         return True
 
-    def _shouldTerminateProcess(self, line):
+    def _should_term_proc(self, line):
         return False
 
     def onProcessEnded(self, status):
@@ -56,14 +56,14 @@ class SubProcessProtocol(ProcessProtocol):
     def __init__(self, manager):
         super(SubProcessProtocol, self).__init__()
         self.logger = getLogger("nlaunch.subprocess")
-        self.manager = manager
+        self.com = manager
 
     def errReceived(self, data):
         self.logger.debug(data.decode("utf8"))
 
     def outReceived(self, data):
         self.logger.debug("Received '%s' from subprocess" % (data,))
-        self.manager.send(data.decode("utf8"))
+        self.com.send(data.decode("utf8"))
 
     def processEnded(self, status):
         self._notifyProcessEnded(status)
@@ -74,10 +74,10 @@ class SubProcessProtocol(ProcessProtocol):
 
     def _notifyProcessEnded(self, status):
         try:
-            if callable(self.manager.getCurrentHandler().onProcessEnded):
+            if callable(self.com.get_current_handler().onProcessEnded):
                 self.logger.debug("Process ended. Notifying the handler")
-                self.manager.getCurrentHandler().onProcessEnded(status)
+                self.com.get_current_handler().onProcessEnded(status)
         except AttributeError as e:
             self.logger.debug(
                 "Handler '{handler}' doesn't respond to event 'process ended'".format(
-                    handler=self.manager.getCurrentHandler().__class__.__name__))
+                    handler=self.com.get_current_handler().__class__.__name__))
