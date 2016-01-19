@@ -1,4 +1,6 @@
-# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# -*- coding: utf-8 -*-
+"""Definition of :class:`.NLaunchReceiver`."""
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from logging import getLogger as get_logger
 from textwrap import dedent
 
@@ -8,7 +10,7 @@ from communication.facade import NLaunchCommFacade
 from handlers.specific.initial_handler import InitialHandler
 from misc.dal import DAL
 from misc.text import color_info, color_error, color_token
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 class NLaunchReceiver(LineReceiver):

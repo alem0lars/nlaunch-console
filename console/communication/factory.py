@@ -1,18 +1,22 @@
-# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-from twisted.internet.protocol import Factory
+# -*- coding: utf-8 -*-
+"""Definition of :class:`.NLaunchFactory`."""
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+import twisted.internet.protocol
 
-from communication.receiver import NLaunchReceiver
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+import communication.receiver
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
-class NLaunchFactory(Factory):
-    """Factory used by the twisted reactor to handle clients.
+class NLaunchFactory(twisted.internet.protocol.Factory):
+    u"""Factory used by the twisted reactor to handle clients.
 
-    Create a new :class:`NLaunchReceiver` for every client.
+    Create a new :class:`.NLaunchReceiver` for every client.
     """
+
     def __init__(self, pwd_path):
+        u"""Create a new :class:`.NLaunchFactory`."""
         super(NLaunchFactory, self).__init__()
         self.pwd_path = pwd_path
 
     def buildProtocol(self, addr):
-        return NLaunchReceiver(self.pwd_path)
+        return communication.receiver.NLaunchReceiver(self.pwd_path)

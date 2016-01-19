@@ -1,16 +1,41 @@
-# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-from termcolor import colored
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# -*- coding: utf-8 -*-
+"""Define common text utilities."""
+# ☞ Imports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+import termcolor
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 def color_success(msg):
-    return colored(msg, "green", attrs=["underline"])
+    """Color the provided string as a success message.
+
+    :param msg: The string to be colored.
+    :type msg: str
+    """
+    return termcolor.colored(msg, "green", attrs=["underline"])
+
 
 def color_info(msg):
-    return colored(msg, "cyan")
+    """Color the provided string as an informative message.
+
+    :param msg: The string to be colored.
+    :type msg: str
+    """
+    return termcolor.colored(msg, "cyan")
+
 
 def color_error(msg):
-    return colored(msg, "red", attrs=["underline"])
+    """Color the provided string as an error message.
+
+    :param msg: The string to be colored.
+    :type msg: str
+    """
+    return termcolor.colored(msg, "red", attrs=["underline"])
+
 
 def color_token(token):
-    return colored(token, "magenta", attrs=["bold"])
+    """Color the provided string as a token.
+
+    :param token: The string to be colored.
+    :type token: str
+    """
+    return termcolor.colored(token, "magenta", attrs=["bold"])

@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
-#
-# ☞ State machine ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#
-# ┌────────┐           ┌──────────┐              ┌─────┐
-# │Decrypt │  enter    │  Unlock  │   shell      │Basic│
-# │ Email  │──hidden ─▶│Restricted│──unlocked───▶│ BOF │
-# └────────┘   code    │  Shell   │              └─────┘
-#                      └──────────┘                 │
-#                                                Enabled
-#                                                `disarm`
-#                                                command
-#                                                   │
-#                                                   ▼
-#                      ┌─────────┐   Disarm   ┌───────────┐
-#                      │ Victory │◀────the ───│  GoodBad  │
-#                      └─────────┘   missile  └───────────┘
-#
+# -*- coding: utf-8 -*-
+
+u"""NLaunch console entry point.
+
+.. code-block::
+
+    ┌────────┐           ┌──────────┐              ┌─────┐
+    │Decrypt │  enter    │  Unlock  │   shell      │Basic│
+    │ Email  │──hidden ─▶│Restricted│──unlocked───▶│ BOF │
+    └────────┘   code    │  Shell   │              └─────┘
+                         └──────────┘                 │
+                                                   Enabled
+                                                   `disarm`
+                                                   command
+                                                      │
+                                                      ▼
+                         ┌─────────┐   Disarm   ┌───────────┐
+                         │ Victory │◀────the ───│  GoodBad  │
+                         └─────────┘   missile  └───────────┘
+"""
 # ☞ Check Python interpreter ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 from sys import version_info, exit
 
@@ -62,12 +65,14 @@ class Main(object):
         try:
             self.port = int(port)
         except Exception as e:
-            logger.error("Invalid port '%s': %s" % (port, e))
+            self.logger.error("Invalid port '%s': %s" % (port, e))
             exit(self.STATUSCODE_INVALID_ARGS)
 
     def start(self):
-        self.logger.info("Starting NLaunch Console (port='%s', pwd_path='%s')" %
-                         (self.port, self.pwd_path))
+        """Start the NLaunch Console."""
+        self.logger.info("Starting NLaunch Console " +
+                         "(port='{port}', pwd_path='{pwd_path}')".format(
+                            port=self.port, pwd_path=self.pwd_path))
         reactor.listenTCP(self.port, NLaunchFactory(self.pwd_path))
         reactor.run()
 
@@ -95,6 +100,6 @@ class Main(object):
         self.logger.addHandler(loggingHandler)
 
 
-if __name__ == "__main__": # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+if __name__ == "__main__":  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     Main(environ["PORT"], environ["LEVELS_PWDS"]).start()
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
